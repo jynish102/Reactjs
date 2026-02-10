@@ -1,0 +1,15 @@
+
+
+
+function App() {
+  console.log(import.meta.env.vite_APPWRITE_URL);
+ 
+
+  return (
+    <>
+     <h1>Project With Appwrite</h1>
+    </>
+  )
+}
+
+export default App
