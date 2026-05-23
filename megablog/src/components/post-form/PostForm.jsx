@@ -18,6 +18,7 @@ export default function PostForm({ post }) {
 
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
+  // console.log("post", userData);
 
   const submit = async (data) => {
     if (post) {
@@ -25,13 +26,14 @@ export default function PostForm({ post }) {
         ? await appwriteService.uploadImage(data.image[0])
         : null;
 
+      console.log("file", file);  
       if (file) {
-        appwriteService.deleteImage(post.featuredImg);
+        appwriteService.deleteImage(post.feturedimg);
       }
 
       const dbPost = await appwriteService.updatePost(post.$id, {
         ...data,
-        featuredImg: file ? file.$id : undefined,
+        feturedimg: file ? file.$id : undefined,
       });
 
       if (dbPost) {
@@ -42,7 +44,7 @@ export default function PostForm({ post }) {
 
       if (file) {
         const fileId = file.$id;
-        data.featuredImg = fileId;
+        data.feturedimg = fileId;
         const dbPost = await appwriteService.createPost({
           ...data,
           userId: userData.$id,
@@ -114,7 +116,7 @@ export default function PostForm({ post }) {
         {post && (
           <div className="w-full mb-4">
             <img
-              src={appwriteService.getFilePreview(post.featuredImage)}
+              src={appwriteService.getImagePreview(post.feturedimg)}
               alt={post.title}
               className="rounded-lg"
             />

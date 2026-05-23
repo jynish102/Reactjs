@@ -2,13 +2,18 @@ import React from "react";
 import appwriteService from "../appwrite/db";
 import { Link } from "react-router-dom";
 
-function PostCard({ $id, title, featuredimg }) {
+function PostCard({ $id, title, feturedimg }) {
+  console.log("Image ID:", feturedimg);
   return (
-    <Link to={`/post/${$id}`}>
+    <Link to={`/post/${$id}`} >
       <div className="w-full bg-gray-100 rounded-xl p-4">
         <div className="w-full justify-center mb-4">
           <img
-            src={appwriteService.getImagePreview(featuredimg)}
+            src={
+              feturedimg
+                ? appwriteService.getImagePreview(feturedimg)
+                : "https://via.placeholder.com/300"
+            }
             alt={title}
             className="rounded-xl"
           />

@@ -21,7 +21,7 @@ export class dbService {
         databaseId: conf.appwriteDatabaseId,
         collectionId: conf.appwriteCollectionId,
         documentId: slug,
-        data: { title, featuredImage: feturedimg, content, status, userId },
+        data: { title, feturedimg, content, status, userId },
       });
     } catch (e) {
       console.log("Appwrite Error:", e);
@@ -30,11 +30,11 @@ export class dbService {
 
   async getPosts(queries = [Query.equal("status", "active")]) {
     try {
-      return await this.databases.listDocuments(
-        conf.appwriteDatabaseId,
-        conf.appwriteCollectionId,
-        queries,
-      );
+      return await this.databases.listDocuments({
+        databaseId: conf.appwriteDatabaseId,
+        collectionId: conf.appwriteCollectionId,
+        queries
+      });
     } catch (e) {
       console.log("Appwrite Error:", e);
       return false;
@@ -60,7 +60,7 @@ export class dbService {
         databaseId: conf.appwriteDatabaseId,
         collectionId: conf.appwriteCollectionId,
         documentId: slug,
-        data: { title, featuredImage: feturedimg, content, status },
+        data: { title, feturedimg, content, status },
       });
     } catch (e) {
       console.log("Appwrite Error:", e);
@@ -84,11 +84,11 @@ export class dbService {
   //upload image to appwrite storage and return fileId
   async uploadImage(file) {
     try {
-      return await this.storage.createFile(
-        conf.appwriteBucketId,
-        ID.unique(),
-        file,
-      );
+      return await this.storage.createFile({
+        bucketId: conf.appwriteBucketId,
+        fileId: ID.unique(),
+        file
+      });
     } catch (e) {
       console.log("Appwrite Error:", e);
       return false;
@@ -97,7 +97,10 @@ export class dbService {
 
   async deleteImage(fileId) {
     try {
-      await this.storage.deleteFile(conf.appwriteBucketId, fileId);
+      await this.storage.deleteFile({
+        bucketId: conf.appwriteBucketId,
+        fileId
+      });
       return true;
     } catch (e) {
       console.log("Appwrite Error:", e);
@@ -106,7 +109,13 @@ export class dbService {
   }
 
   getImagePreview(fileId) {
-    return this.storage.getFilePreview(conf.appwriteBucketId, fileId);
+    return this.storage
+      .getFileView({
+        bucketId: conf.appwriteBucketId,
+        fileId,
+      })
+      .toString();
+      
   }
 }
 
